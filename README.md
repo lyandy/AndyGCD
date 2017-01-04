@@ -1,5 +1,5 @@
 # AndyGCD
-AndyGCD aimed to make OC native GCD easier and simpler to use. Include dispatchQueue、delay、group、timer、semaphore、apply、barrier
+AndyGCD aimed to make OC native GCD easier and simpler to use. Include dispatchQueue、delay、group、timer、semaphore、apply、barrier.
 
 ---
 
@@ -111,7 +111,9 @@ AndyGCDSemaphore *semaphore = [[AndyGCDSemaphore alloc] init];
 NSString *from = @"/Users/liyang/Desktop/From";
 NSString *to = @"/Users/liyang/Desktop/To";
 
-NSFileManager *mgr = [NSFileManager defaultManager];  NSArray *subpaths = [mgr subpathsAtPath:from];
+NSFileManager *mgr = [NSFileManager defaultManager];
+NSArray *subpaths = [mgr subpathsAtPath:from];
+
 [[AndyGCDQueue globalQueue] applyExecute:subpaths.count block:^(size_t index) {
     NSString *subpath = subpaths[index];
     NSString *fromFullpath = [from stringByAppendingPathComponent:subpath];
@@ -128,7 +130,7 @@ NSFileManager *mgr = [NSFileManager defaultManager];  NSArray *subpaths = [mgr s
 
 ### barrier
 
-_* 注意 ```dispatch_get_global_queue(<#long identifier#>, <#unsigned long flags#>)```是不行的。即在使用barrier的时候不可以使用[AndyGCDQueue globalQueue]全局队列 *_
+_注意 ```dispatch_get_global_queue(<#long identifier#>, <#unsigned long flags#>)```是不行的。即在使用barrier的时候不可以使用```[AndyGCDQueue globalQueue]```全局队列_
 
 
 ```
