@@ -1,5 +1,7 @@
 # AndyGCD
-AndyGCD aimed to make OC native GCD easier and simpler to use. Include dispatchQueue、delay、group、timer、semaphore、apply、barrier.
+AndyGCD aimed to make C GCD easier and simpler to use. Include dispatchQueue、delay、group、timer、semaphore、apply、barrier.
+
+__Use in pod:__  ```pod 'AndyGCD'```
 
 ---
 
@@ -32,8 +34,8 @@ AndyGCD aimed to make OC native GCD easier and simpler to use. Include dispatchQ
     [AndyGCDQueue executeInMainQueue:^{
 
         NSLog(@"---%@", [NSThread currentThread]);
-    } afterDelaySecs:NSEC_PER_SEC * 3];
-} afterDelaySecs:NSEC_PER_SEC * 3];
+    } afterDelaySecs:3];
+} afterDelaySecs:3];
 
 ```
 

@@ -42,8 +42,8 @@
         [AndyGCDQueue executeInMainQueue:^{
             
             NSLog(@"---%@", [NSThread currentThread]);
-        } afterDelaySecs:NSEC_PER_SEC * 3];
-    } afterDelaySecs:NSEC_PER_SEC * 3];
+        } afterDelaySecs:3];
+    } afterDelaySecs:3];
     
     
     //group
