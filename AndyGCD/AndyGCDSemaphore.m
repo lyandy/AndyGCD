@@ -36,16 +36,19 @@
 
 - (BOOL)signal
 {
+    NSParameterAssert(self.dispatchSemaphore);
     return dispatch_semaphore_signal(self.dispatchSemaphore) != 0;
 }
 
 - (void)wait
 {
+    NSParameterAssert(self.dispatchSemaphore);
     dispatch_semaphore_wait(self.dispatchSemaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (BOOL)wait:(int64_t)delta
 {
+    NSParameterAssert(self.dispatchSemaphore);
     return dispatch_semaphore_wait(self.dispatchSemaphore, dispatch_time(DISPATCH_TIME_NOW, delta)) == 0;
 }
 

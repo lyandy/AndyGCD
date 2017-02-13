@@ -10,11 +10,11 @@
 
 @interface AndyGCDSemaphore : NSObject
 
-@property (strong, readwrite, nonatomic) dispatch_semaphore_t dispatchSemaphore;
+@property (strong, readwrite, nonatomic, nullable) dispatch_semaphore_t dispatchSemaphore;
 
 #pragma 初始化
-- (instancetype)init;
-- (instancetype)initWithValue:(long)value;
+- (nullable instancetype)init;
+- (nullable instancetype)initWithValue:(long)value;
 
 #pragma mark - 用法
 - (BOOL)signal;
