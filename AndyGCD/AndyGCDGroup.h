@@ -10,10 +10,10 @@
 
 @interface AndyGCDGroup : NSObject
 
-@property (strong, nonatomic, readwrite) dispatch_group_t dispatchGroup;
+@property (strong, nonatomic, readwrite, nullable) dispatch_group_t dispatchGroup;
 
 #pragma 初始化
-- (instancetype)init;
+- (nullable instancetype)init;
 
 #pragma mark - 用法
 - (void)enter;

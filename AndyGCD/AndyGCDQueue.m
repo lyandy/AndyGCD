@@ -11,6 +11,8 @@
 
 @implementation AndyGCDQueue
 
+static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey;
+
 static AndyGCDQueue *mainQueue;
 static AndyGCDQueue *globalQueue;
 static AndyGCDQueue *highPriorityGlobalQueue;
@@ -73,6 +75,8 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     {
         
         self.dispatchQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL);
+        
+        dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
     }
     
     return self;
@@ -85,6 +89,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     if (self)
     {
         self.dispatchQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_SERIAL);
+        dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
     }
     
     return self;
@@ -98,6 +103,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     {
         
         self.dispatchQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
     }
     
     return self;
@@ -109,6 +115,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     if (self)
     {
         self.dispatchQueue = dispatch_queue_create([label UTF8String], DISPATCH_QUEUE_CONCURRENT);
+        dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
     }
     return self;
 }
@@ -137,7 +144,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 - (void)waitExecute:(dispatch_block_t)block
 {
     NSParameterAssert(block);
-    dispatch_sync(self.dispatchQueue, block);
+    [self dispatchSync:block];
 }
 
 /*
@@ -159,7 +166,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 - (void)waitBarrierExecute:(dispatch_block_t)block
 {
     NSParameterAssert(block);
-    dispatch_barrier_sync(self.dispatchQueue, block);
+    [self dispatchBarrierSync:block];
 }
 
 - (void)suspend
@@ -175,12 +182,14 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 - (void)execute:(dispatch_block_t)block inGroup:(AndyGCDGroup *)group
 {
     NSParameterAssert(block);
+    NSParameterAssert(group);
     dispatch_group_async(group.dispatchGroup, self.dispatchQueue, block);
 }
 
 - (void)notify:(dispatch_block_t)block inGroup:(AndyGCDGroup *)group
 {
     NSParameterAssert(block);
+    NSParameterAssert(group);
     dispatch_group_notify(group.dispatchGroup, self.dispatchQueue, block);
 }
 
@@ -249,5 +258,36 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     NSParameterAssert(block);
     dispatch_async(backgroundPriorityGlobalQueue.dispatchQueue, block);
 }
+
+- (void)dispatchSync:(dispatch_block_t)block {
+    AndyGCDQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);
+    assert(currentSyncQueue != self && "dispatchSync: was called reentrantly on the same queue, which would lead to a deadlock");
+
+    if (currentSyncQueue == self) {
+        block();
+    } else {
+        dispatch_sync(self.dispatchQueue, block);
+    }
+}
+
+- (void)dispatchBarrierSync:(dispatch_block_t)block {
+    AndyGCDQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);
+    assert(currentSyncQueue != self && "dispatchBarrierSync: was called reentrantly on the same queue, which would lead to a deadlock");
+    
+    if (currentSyncQueue == self) {
+        block();
+    } else {
+        dispatch_barrier_sync(self.dispatchQueue, block);
+    }
+}
+
+//- (void)dispatchAsync:(dispatch_block_t)block {
+//    AndyGCDQueue *currentQueue = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);
+//    if (currentQueue == self) {
+//        block();
+//    } else {
+//        dispatch_async(self.dispatchQueue, block);
+//    }
+//}
 
 @end

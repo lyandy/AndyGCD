@@ -12,48 +12,48 @@
 
 @interface AndyGCDQueue : NSObject
 
-@property (strong, readwrite, nonatomic) dispatch_queue_t dispatchQueue;
+@property (strong, readwrite, nonatomic, nonnull) dispatch_queue_t dispatchQueue;
 
-+ (AndyGCDQueue *)mainQueue;
-+ (AndyGCDQueue *)globalQueue;
-+ (AndyGCDQueue *)highPriorityGlobalQueue;
-+ (AndyGCDQueue *)lowPriorityGlobalQueue;
-+ (AndyGCDQueue *)backgroundPriorityGlobalQueue;
++ (nonnull AndyGCDQueue *)mainQueue;
++ (nullable AndyGCDQueue *)globalQueue;
++ (nullable AndyGCDQueue *)highPriorityGlobalQueue;
++ (nullable AndyGCDQueue *)lowPriorityGlobalQueue;
++ (nullable AndyGCDQueue *)backgroundPriorityGlobalQueue;
 
 #pragma mark - 便利的构造方法
-+ (void)executeInMainQueue:(dispatch_block_t)block;
-+ (void)executeInGlobalQueue:(dispatch_block_t)block;
-+ (void)executeInHighPriorityGlobalQueue:(dispatch_block_t)block;
-+ (void)executeInLowPriorityGlobalQueue:(dispatch_block_t)block;
-+ (void)executeInBackgroundPriorityGlobalQueue:(dispatch_block_t)block;
-+ (void)executeInMainQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec;
-+ (void)executeInGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec;
-+ (void)executeInHighPriorityGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec;
-+ (void)executeInLowPriorityGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec;
-+ (void)executeInBackgroundPriorityGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec;
++ (void)executeInMainQueue:(dispatch_block_t __nonnull)block;
++ (void)executeInGlobalQueue:(dispatch_block_t __nonnull)block;
++ (void)executeInHighPriorityGlobalQueue:(dispatch_block_t __nonnull)block;
++ (void)executeInLowPriorityGlobalQueue:(dispatch_block_t __nonnull)block;
++ (void)executeInBackgroundPriorityGlobalQueue:(dispatch_block_t __nonnull)block;
++ (void)executeInMainQueue:(dispatch_block_t __nonnull)block afterDelaySecs:(NSTimeInterval)sec;
++ (void)executeInGlobalQueue:(dispatch_block_t __nonnull)block afterDelaySecs:(NSTimeInterval)sec;
++ (void)executeInHighPriorityGlobalQueue:(dispatch_block_t __nonnull)block afterDelaySecs:(NSTimeInterval)sec;
++ (void)executeInLowPriorityGlobalQueue:(dispatch_block_t __nonnull)block afterDelaySecs:(NSTimeInterval)sec;
++ (void)executeInBackgroundPriorityGlobalQueue:(dispatch_block_t __nonnull)block afterDelaySecs:(NSTimeInterval)sec;
 
 #pragma 初始化
-- (instancetype)init;
-- (instancetype)initSerial;
-- (instancetype)initSerialWithLabel:(NSString *)label;
-- (instancetype)initConcurrent;
-- (instancetype)initConcurrentWithLabel:(NSString *)label;
+- (nullable instancetype)init;
+- (nullable instancetype)initSerial;
+- (nullable instancetype)initSerialWithLabel:(NSString * __nullable)label;
+- (nullable instancetype)initConcurrent;
+- (nullable instancetype)initConcurrentWithLabel:(NSString * __nullable)label;
 
 #pragma mark - 用法
-- (void)execute:(dispatch_block_t)block;
-- (void)execute:(dispatch_block_t)block afterDelay:(int64_t)delta;
-- (void)execute:(dispatch_block_t)block afterDelaySecs:(float)delta;
-- (void)waitExecute:(dispatch_block_t)block;
-- (void)barrierExecute:(dispatch_block_t)block;
-- (void)waitBarrierExecute:(dispatch_block_t)block;
+- (void)execute:(dispatch_block_t __nonnull)block;
+- (void)execute:(dispatch_block_t __nonnull)block afterDelay:(int64_t)delta;
+- (void)execute:(dispatch_block_t __nonnull)block afterDelaySecs:(float)delta;
+- (void)waitExecute:(dispatch_block_t __nonnull)block;
+- (void)barrierExecute:(dispatch_block_t __nonnull)block;
+- (void)waitBarrierExecute:(dispatch_block_t __nonnull)block;
 - (void)suspend;
 - (void)resume;
 
 #pragma mark - 与GCDGroup相关
-- (void)execute:(dispatch_block_t)block inGroup:(AndyGCDGroup *)group;
-- (void)notify:(dispatch_block_t)block inGroup:(AndyGCDGroup *)group;
+- (void)execute:(dispatch_block_t __nonnull)block inGroup:(AndyGCDGroup * __nonnull)group;
+- (void)notify:(dispatch_block_t __nonnull)block inGroup:(AndyGCDGroup * __nonnull)group;
 
 #pragma mark - 与GCDApply相关
-- (void)applyExecute:(size_t)iterations block:(DISPATCH_NOESCAPE void (^)(size_t index))block;
+- (void)applyExecute:(size_t)iterations block:(DISPATCH_NOESCAPE void (^ __nonnull)(size_t index))block;
 
 @end
