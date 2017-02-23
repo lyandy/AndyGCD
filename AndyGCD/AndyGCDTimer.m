@@ -8,6 +8,7 @@
 
 #import "AndyGCDTimer.h"
 #import "AndyGCDQueue.h"
+#import "AndyGCDConst.h"
 
 @implementation AndyGCDTimer
 
@@ -39,45 +40,45 @@
 
 - (void)timerExecute:(dispatch_block_t)block timeInterval:(uint64_t)interval
 {
-    NSParameterAssert(block);
-    NSParameterAssert(self.dispatchSource);
+    AndyGCDAssert(block != nil, @"block can not be nil");
+    AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_source_set_timer(self.dispatchSource, dispatch_time(DISPATCH_TIME_NOW, 0), interval, 0);
     dispatch_source_set_event_handler(self.dispatchSource, block);
 }
 
 - (void)timerExecute:(dispatch_block_t)block timeInterval:(uint64_t)interval delay:(uint64_t)delay
 {
-    NSParameterAssert(block);
-    NSParameterAssert(self.dispatchSource);
+    AndyGCDAssert(block != nil, @"block can not be nil");
+    AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_source_set_timer(self.dispatchSource, dispatch_time(DISPATCH_TIME_NOW, delay), interval, 0);
     dispatch_source_set_event_handler(self.dispatchSource, block);
 }
 
 - (void)timerExecute:(dispatch_block_t)block timeIntervalWithSecs:(float)secs
 {
-    NSParameterAssert(block);
-    NSParameterAssert(self.dispatchSource);
+    AndyGCDAssert(block != nil, @"block can not be nil");
+    AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_source_set_timer(self.dispatchSource, dispatch_time(DISPATCH_TIME_NOW, 0), secs * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(self.dispatchSource, block);
 }
 
 - (void)timerExecute:(dispatch_block_t)block timeIntervalWithSecs:(float)secs delaySecs:(float)delaySecs
 {
-    NSParameterAssert(block);
-    NSParameterAssert(self.dispatchSource);
+    AndyGCDAssert(block != nil, @"block can not be nil");
+    AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_source_set_timer(self.dispatchSource, dispatch_time(DISPATCH_TIME_NOW, delaySecs * NSEC_PER_SEC), secs * NSEC_PER_SEC, 0);
     dispatch_source_set_event_handler(self.dispatchSource, block);
 }
 
 - (void)start
 {
-    NSParameterAssert(self.dispatchSource);
+    AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_resume(self.dispatchSource);
 }
 
 - (void)destroy
 {
-    NSParameterAssert(self.dispatchSource);
+    AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_source_cancel(self.dispatchSource);
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "AndyGCDSemaphore.h"
+#import "AndyGCDConst.h"
 
 @implementation AndyGCDSemaphore
 
@@ -36,19 +37,19 @@
 
 - (BOOL)signal
 {
-    NSParameterAssert(self.dispatchSemaphore);
+    AndyGCDAssert(self.dispatchSemaphore != nil, @"self.dispatchSemaphore can not be nil");
     return dispatch_semaphore_signal(self.dispatchSemaphore) != 0;
 }
 
 - (void)wait
 {
-    NSParameterAssert(self.dispatchSemaphore);
+    AndyGCDAssert(self.dispatchSemaphore != nil, @"self.dispatchSemaphore can not be nil");
     dispatch_semaphore_wait(self.dispatchSemaphore, DISPATCH_TIME_FOREVER);
 }
 
 - (BOOL)wait:(int64_t)delta
 {
-    NSParameterAssert(self.dispatchSemaphore);
+    AndyGCDAssert(self.dispatchSemaphore != nil, @"self.dispatchSemaphore can not be nil");
     return dispatch_semaphore_wait(self.dispatchSemaphore, dispatch_time(DISPATCH_TIME_NOW, delta)) == 0;
 }
 

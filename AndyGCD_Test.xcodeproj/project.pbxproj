@@ -19,6 +19,7 @@
 		B6B707DE1E1BB1AF00347B96 /* AndyGCDGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B707DD1E1BB1AF00347B96 /* AndyGCDGroup.m */; };
 		B6B707E11E1BB77100347B96 /* AndyGCDSemaphore.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B707E01E1BB77100347B96 /* AndyGCDSemaphore.m */; };
 		B6B707E41E1BB78100347B96 /* AndyGCDTimer.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B707E31E1BB78100347B96 /* AndyGCDTimer.m */; };
+		B6BA3A7D1E5EEE65006E7983 /* AndyGCDConst.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BA3A7C1E5EEE65006E7983 /* AndyGCDConst.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,8 @@
 		B6B707E01E1BB77100347B96 /* AndyGCDSemaphore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndyGCDSemaphore.m; sourceTree = "<group>"; };
 		B6B707E21E1BB78100347B96 /* AndyGCDTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndyGCDTimer.h; sourceTree = "<group>"; };
 		B6B707E31E1BB78100347B96 /* AndyGCDTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndyGCDTimer.m; sourceTree = "<group>"; };
+		B6BA3A7B1E5EEE65006E7983 /* AndyGCDConst.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndyGCDConst.h; sourceTree = "<group>"; };
+		B6BA3A7C1E5EEE65006E7983 /* AndyGCDConst.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndyGCDConst.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +169,8 @@
 				B6B707E01E1BB77100347B96 /* AndyGCDSemaphore.m */,
 				B6B707E21E1BB78100347B96 /* AndyGCDTimer.h */,
 				B6B707E31E1BB78100347B96 /* AndyGCDTimer.m */,
+				B6BA3A7B1E5EEE65006E7983 /* AndyGCDConst.h */,
+				B6BA3A7C1E5EEE65006E7983 /* AndyGCDConst.m */,
 			);
 			path = AndyGCD;
 			sourceTree = "<group>";
@@ -306,6 +311,7 @@
 			files = (
 				B6B707DB1E1BB0F300347B96 /* AndyGCDQueue.m in Sources */,
 				B6B707E11E1BB77100347B96 /* AndyGCDSemaphore.m in Sources */,
+				B6BA3A7D1E5EEE65006E7983 /* AndyGCDConst.m in Sources */,
 				B6B707AC1E1BAF9900347B96 /* ViewController.m in Sources */,
 				B6B707DE1E1BB1AF00347B96 /* AndyGCDGroup.m in Sources */,
 				B6B707A91E1BAF9900347B96 /* AppDelegate.m in Sources */,

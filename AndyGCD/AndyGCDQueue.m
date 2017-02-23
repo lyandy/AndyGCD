@@ -8,6 +8,7 @@
 
 #import "AndyGCDQueue.h"
 #import "AndyGCDGroup.h"
+#import "AndyGCDConst.h"
 
 @implementation AndyGCDQueue
 
@@ -122,19 +123,19 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 
 - (void)execute:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_async(self.dispatchQueue, block);
 }
 
 - (void)execute:(dispatch_block_t)block afterDelay:(int64_t)delta
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delta), self.dispatchQueue, block);
 }
 
 - (void)execute:(dispatch_block_t)block afterDelaySecs:(float)delta
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, delta * NSEC_PER_SEC), self.dispatchQueue, block);
 }
 
@@ -143,7 +144,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
  */
 - (void)waitExecute:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     [self dispatchSync:block];
 }
 
@@ -153,7 +154,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
  */
 - (void)barrierExecute:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_barrier_async(self.dispatchQueue, block);
 }
 
@@ -165,7 +166,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 
 - (void)waitBarrierExecute:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     [self dispatchBarrierSync:block];
 }
 
@@ -181,15 +182,15 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 
 - (void)execute:(dispatch_block_t)block inGroup:(AndyGCDGroup *)group
 {
-    NSParameterAssert(block);
-    NSParameterAssert(group);
+    AndyGCDAssert(block != nil, @"block can not be nil");
+    AndyGCDAssert(group != nil, @"group can not be nil");
     dispatch_group_async(group.dispatchGroup, self.dispatchQueue, block);
 }
 
 - (void)notify:(dispatch_block_t)block inGroup:(AndyGCDGroup *)group
 {
-    NSParameterAssert(block);
-    NSParameterAssert(group);
+    AndyGCDAssert(block != nil, @"block can not be nil");
+    AndyGCDAssert(group != nil, @"group can not be nil");
     dispatch_group_notify(group.dispatchGroup, self.dispatchQueue, block);
 }
 
@@ -201,68 +202,69 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 #pragma mark - 便利的构造方法
 + (void)executeInMainQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * sec), mainQueue.dispatchQueue, block);
 }
 
 + (void)executeInGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * sec), globalQueue.dispatchQueue, block);
 }
 
 + (void)executeInHighPriorityGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * sec), highPriorityGlobalQueue.dispatchQueue, block);
 }
 
 + (void)executeInLowPriorityGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * sec), lowPriorityGlobalQueue.dispatchQueue, block);
 }
 
 + (void)executeInBackgroundPriorityGlobalQueue:(dispatch_block_t)block afterDelaySecs:(NSTimeInterval)sec
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * sec), backgroundPriorityGlobalQueue.dispatchQueue, block);
 }
 
 + (void)executeInMainQueue:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");;
     dispatch_async(mainQueue.dispatchQueue, block);
 }
 
 + (void)executeInGlobalQueue:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_async(globalQueue.dispatchQueue, block);
 }
 
 + (void)executeInHighPriorityGlobalQueue:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_async(highPriorityGlobalQueue.dispatchQueue, block);
 }
 
 + (void)executeInLowPriorityGlobalQueue:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_async(lowPriorityGlobalQueue.dispatchQueue, block);
 }
 
 + (void)executeInBackgroundPriorityGlobalQueue:(dispatch_block_t)block
 {
-    NSParameterAssert(block);
+    AndyGCDAssert(block != nil, @"block can not be nil");
     dispatch_async(backgroundPriorityGlobalQueue.dispatchQueue, block);
 }
 
 - (void)dispatchSync:(dispatch_block_t)block {
     AndyGCDQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);
-    assert(currentSyncQueue != self && "dispatchSync: was called reentrantly on the same queue, which would lead to a deadlock");
-
+    
+    AndyGCDAssert(currentSyncQueue != self, @"dispatchSync: was called reentrantly on the same queue, which would lead to a deadlock");
+    
     if (currentSyncQueue == self) {
         block();
     } else {
@@ -272,7 +274,8 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 
 - (void)dispatchBarrierSync:(dispatch_block_t)block {
     AndyGCDQueue *currentSyncQueue = (__bridge id)dispatch_get_specific(kDispatchQueueSpecificKey);
-    assert(currentSyncQueue != self && "dispatchBarrierSync: was called reentrantly on the same queue, which would lead to a deadlock");
+    
+    AndyGCDAssert(currentSyncQueue != self, @"dispatchBarrierSync: was called reentrantly on the same queue, which would lead to a deadlock");
     
     if (currentSyncQueue == self) {
         block();

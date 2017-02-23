@@ -48,16 +48,16 @@
 //    }];
     
     
-//    AndyGCDQueue *queue = [[AndyGCDQueue alloc] init];
-//    AndyGCDQueue *queue1 = [[AndyGCDQueue alloc] init];
+    AndyGCDQueue *queue = [[AndyGCDQueue alloc] init];
+    AndyGCDQueue *queue1 = [[AndyGCDQueue alloc] init];
     
-//    [queue waitExecute:^{
-//        NSLog(@"第一个");
-//        [queue waitExecute:^{
-//            NSLog(@"第二个");
-//        }];
-//    }];
-//    NSLog(@"第三个");
+    [queue waitExecute:^{
+        NSLog(@"第一个");
+        [queue1 waitExecute:^{
+            NSLog(@"第二个");
+        }];
+    }];
+    NSLog(@"第三个");
     
     
 //    //delay
