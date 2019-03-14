@@ -384,7 +384,7 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     dispatch_group_notify(group.dispatchGroup, self.dispatchQueue, block);
 }
 
-- (void)applyExecute:(size_t)iterations block:(void (^)(size_t))block
+- (void)applyExecute:(size_t)iterations block:(DISPATCH_NOESCAPE void (^)(size_t))block
 {
      dispatch_apply(iterations, self.dispatchQueue, block);
 }

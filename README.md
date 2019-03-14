@@ -161,3 +161,28 @@ AndyGCDQueue *concurrentQueue = [[AndyGCDQueue alloc] initConcurrent];
 ```
 
 ---
+
+### QOS DispatchContextQueue
+
+```
+AndyGCDQueue *contextQueue = [[AndyGCDQueue alloc] initWithQOS:NSQualityOfServiceUtility queueCount:5];
+for (int i = 0; i < 100; i++) {
+    [contextQueue execute:^{
+
+        NSLog(@"=====> %@", [NSThread currentThread]);
+    }];
+
+    [contextQueue execute:^{
+
+        NSLog(@"=====> %@", [NSThread currentThread]);
+    }];
+
+    [contextQueue execute:^{
+
+        NSLog(@"=====> %@", [NSThread currentThread]);
+    }];
+}
+
+```
+
+---
