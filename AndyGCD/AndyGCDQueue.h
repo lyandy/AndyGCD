@@ -38,6 +38,7 @@
 - (nullable instancetype)initSerialWithLabel:(NSString * __nullable)label;
 - (nullable instancetype)initConcurrent;
 - (nullable instancetype)initConcurrentWithLabel:(NSString * __nullable)label;
+- (nullable instancetype)initWithQOS:(NSQualityOfService)qos queueCount:(NSUInteger)queueCount;
 
 #pragma mark - 用法
 - (void)execute:(dispatch_block_t __nonnull)block;

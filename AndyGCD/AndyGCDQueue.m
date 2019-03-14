@@ -9,8 +9,125 @@
 #import "AndyGCDQueue.h"
 #import "AndyGCDGroup.h"
 #import "AndyGCDConst.h"
+#import <UIKit/UIKit.h>
+#import <libkern/OSAtomic.h>
 
-@implementation AndyGCDQueue
+#define MAX_QUEUE_COUNT 32
+
+static inline qos_class_t NSQualityOfServiceToQOSClass(NSQualityOfService qos)
+{
+    switch (qos) {
+        case NSQualityOfServiceUserInteractive: return QOS_CLASS_USER_INTERACTIVE;
+        case NSQualityOfServiceUserInitiated: return QOS_CLASS_USER_INITIATED;
+        case NSQualityOfServiceUtility: return QOS_CLASS_UTILITY;
+        case NSQualityOfServiceBackground: return QOS_CLASS_BACKGROUND;
+        case NSQualityOfServiceDefault: return QOS_CLASS_DEFAULT;
+        default: return QOS_CLASS_UNSPECIFIED;
+    }
+}
+
+typedef struct {
+    void **queues;
+    uint32_t queueCount;
+    int32_t counter;
+} AndyDispatchContext;
+
+static AndyDispatchContext *AndyDispatchContextCreate(uint32_t queueCount, NSQualityOfService qos) {
+    AndyDispatchContext *context = calloc(1, sizeof(AndyDispatchContext));
+    if (!context) return NULL;
+    context->queues =  calloc(queueCount, sizeof(void *));
+    if (!context->queues)
+    {
+        free(context);
+        return NULL;
+    }
+    if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0)
+    {
+        dispatch_qos_class_t qosClass = NSQualityOfServiceToQOSClass(qos);
+        for (NSUInteger i = 0; i < queueCount; i++) {
+            dispatch_queue_attr_t attr = dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_SERIAL, qosClass, 0);
+            dispatch_queue_t queue = dispatch_queue_create(nil, attr);
+            context->queues[i] = (__bridge_retained void *)(queue);
+        }
+    }
+    context->queueCount = queueCount;
+    return context;
+}
+
+static void AndyDispatchContextRelease(AndyDispatchContext *context) {
+    if (!context) return;
+    if (context->queues)
+    {
+        for (NSUInteger i = 0; i < context->queueCount; i++) {
+            void *queuePointer = context->queues[i];
+            dispatch_queue_t queue = (__bridge_transfer dispatch_queue_t)(queuePointer);
+            queue = nil;
+        }
+        free(context->queues);
+        context->queues = NULL;
+    }
+    free(context);
+}
+
+static dispatch_queue_t AndyDispatchContextGetQueue(AndyDispatchContext *context)
+{
+    uint32_t counter = (uint32_t)OSAtomicIncrement32(&context->counter);
+    void *queue = context->queues[counter % context->queueCount];
+    return (__bridge dispatch_queue_t)(queue);
+}
+
+static AndyDispatchContext *AndyDispatchContextGetForQOS(NSQualityOfService qos)
+{
+    static AndyDispatchContext *context[5] = {0};
+    switch (qos) {
+        case NSQualityOfServiceUserInteractive: {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                int count = (int)[NSProcessInfo processInfo].activeProcessorCount;
+                count = count < 1 ? 1 : count > MAX_QUEUE_COUNT ? MAX_QUEUE_COUNT : count;
+                context[0] = AndyDispatchContextCreate(count, qos);
+            });
+            return context[0];
+        } break;
+        case NSQualityOfServiceUserInitiated: {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                int count = (int)[NSProcessInfo processInfo].activeProcessorCount;
+                count = count < 1 ? 1 : count > MAX_QUEUE_COUNT ? MAX_QUEUE_COUNT : count;
+                context[1] = AndyDispatchContextCreate(count, qos);
+            });
+            return context[1];
+        } break;
+        case NSQualityOfServiceUtility: {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                int count = (int)[NSProcessInfo processInfo].activeProcessorCount;
+                count = count < 1 ? 1 : count > MAX_QUEUE_COUNT ? MAX_QUEUE_COUNT : count;
+                context[2] = AndyDispatchContextCreate(count, qos);
+            });
+            return context[2];
+        } break;
+        case NSQualityOfServiceBackground: {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                int count = (int)[NSProcessInfo processInfo].activeProcessorCount;
+                count = count < 1 ? 1 : count > MAX_QUEUE_COUNT ? MAX_QUEUE_COUNT : count;
+                context[3] = AndyDispatchContextCreate(count, qos);
+            });
+            return context[3];
+        } break;
+        case NSQualityOfServiceDefault:
+        default: {
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                int count = (int)[NSProcessInfo processInfo].activeProcessorCount;
+                count = count < 1 ? 1 : count > MAX_QUEUE_COUNT ? MAX_QUEUE_COUNT : count;
+                context[4] = AndyDispatchContextCreate(count, qos);
+            });
+            return context[4];
+        } break;
+    }
+}
 
 static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey;
 
@@ -19,6 +136,12 @@ static AndyGCDQueue *globalQueue;
 static AndyGCDQueue *highPriorityGlobalQueue;
 static AndyGCDQueue *lowPriorityGlobalQueue;
 static AndyGCDQueue *backgroundPriorityGlobalQueue;
+
+@implementation AndyGCDQueue
+{
+    @public
+    AndyDispatchContext *_dispatchContext;
+}
 
 + (AndyGCDQueue *)mainQueue
 {
@@ -74,7 +197,6 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     
     if (self)
     {
-        
         self.dispatchQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_SERIAL);
         
         dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
@@ -102,7 +224,6 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
     
     if (self)
     {
-        
         self.dispatchQueue = dispatch_queue_create(nil, DISPATCH_QUEUE_CONCURRENT);
         dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
     }
@@ -119,6 +240,75 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
         dispatch_queue_set_specific(self.dispatchQueue, kDispatchQueueSpecificKey, (__bridge void *)self, NULL);
     }
     return self;
+}
+
+- (instancetype)initWithContext:(AndyDispatchContext *)context
+{
+    self = [super init];
+    if (!context) return nil;
+    self->_dispatchContext = context;
+    return self;
+}
+
+- (instancetype)initWithQOS:(NSQualityOfService)qos queueCount:(NSUInteger)queueCount
+{
+    if (queueCount == 0 || queueCount > MAX_QUEUE_COUNT) return nil;
+    self = [super init];
+    _dispatchContext = AndyDispatchContextCreate((uint32_t)queueCount, qos);
+    if (!_dispatchContext) return nil;
+    return self;
+}
+
+- (dispatch_queue_t)contextQueue
+{
+    return AndyDispatchContextGetQueue(_dispatchContext);
+}
+
++ (instancetype)defaultPoolForQOS:(NSQualityOfService)qos
+{
+    switch (qos) {
+        case NSQualityOfServiceUserInteractive: {
+            static AndyGCDQueue *pool;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                pool = [[AndyGCDQueue alloc] initWithContext:AndyDispatchContextGetForQOS(qos)];
+            });
+            return pool;
+        } break;
+        case NSQualityOfServiceUserInitiated: {
+            static AndyGCDQueue *pool;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                pool = [[AndyGCDQueue alloc] initWithContext:AndyDispatchContextGetForQOS(qos)];
+            });
+            return pool;
+        } break;
+        case NSQualityOfServiceUtility: {
+            static AndyGCDQueue *pool;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                pool = [[AndyGCDQueue alloc] initWithContext:AndyDispatchContextGetForQOS(qos)];
+            });
+            return pool;
+        } break;
+        case NSQualityOfServiceBackground: {
+            static AndyGCDQueue *pool;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                pool = [[AndyGCDQueue alloc] initWithContext:AndyDispatchContextGetForQOS(qos)];
+            });
+            return pool;
+        } break;
+        case NSQualityOfServiceDefault:
+        default: {
+            static AndyGCDQueue *pool;
+            static dispatch_once_t onceToken;
+            dispatch_once(&onceToken, ^{
+                pool = [[AndyGCDQueue alloc] initWithContext:AndyDispatchContextGetForQOS(NSQualityOfServiceDefault)];
+            });
+            return pool;
+        } break;
+    }
 }
 
 - (void)execute:(dispatch_block_t)block
@@ -197,6 +387,11 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
 - (void)applyExecute:(size_t)iterations block:(void (^)(size_t))block
 {
      dispatch_apply(iterations, self.dispatchQueue, block);
+}
+
+- (dispatch_queue_t)dispatchQueue
+{
+    return _dispatchContext != nil ? [self contextQueue] : _dispatchQueue;
 }
 
 #pragma mark - 便利的构造方法
@@ -281,6 +476,15 @@ static AndyGCDQueue *backgroundPriorityGlobalQueue;
         block();
     } else {
         dispatch_barrier_sync(self.dispatchQueue, block);
+    }
+}
+
+- (void)dealloc
+{
+    if (_dispatchContext)
+    {
+        AndyDispatchContextRelease(_dispatchContext);
+        _dispatchContext = NULL;
     }
 }
 

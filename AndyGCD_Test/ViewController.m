@@ -21,6 +21,30 @@
 {
     [super viewDidLoad];
     
+    AndyGCDQueue *contextQueue = [[AndyGCDQueue alloc] initWithQOS:NSQualityOfServiceUtility queueCount:5];
+    for (int i = 0; i < 100; i++) {
+        [contextQueue execute:^{
+            
+            NSLog(@"=====> %@", [NSThread currentThread]);
+        }];
+        
+        [contextQueue execute:^{
+            
+            NSLog(@"=====> %@", [NSThread currentThread]);
+        }];
+        
+        [contextQueue execute:^{
+            
+            NSLog(@"=====> %@", [NSThread currentThread]);
+        }];
+    }
+    
+    AndyGCDQueue *queue = [[AndyGCDQueue alloc] initSerial];
+    [queue execute:^{
+       NSLog(@"=====> %@", [NSThread currentThread]);
+    }];
+    
+
     
     //main global
 //   [AndyGCDQueue executeInGlobalQueue:^{
@@ -48,16 +72,16 @@
 //    }];
     
     
-    AndyGCDQueue *queue = [[AndyGCDQueue alloc] init];
-    AndyGCDQueue *queue1 = [[AndyGCDQueue alloc] init];
-    
-    [queue waitExecute:^{
-        NSLog(@"第一个");
-        [queue1 waitExecute:^{
-            NSLog(@"第二个");
-        }];
-    }];
-    NSLog(@"第三个");
+//    AndyGCDQueue *queue = [[AndyGCDQueue alloc] init];
+//    AndyGCDQueue *queue1 = [[AndyGCDQueue alloc] init];
+//
+//    [queue waitExecute:^{
+//        NSLog(@"第一个");
+//        [queue1 waitExecute:^{
+//            NSLog(@"第二个");
+//        }];
+//    }];
+//    NSLog(@"第三个");
     
     
 //    //delay
