@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+API_AVAILABLE(ios(10.0))
+
 @interface AndyLifeFreedomThread : NSObject
 
 - (void)syncExecuteBlock:(void (^)(void))blocker;
