@@ -13,5 +13,7 @@
 #import "AndyGCDGroup.h"
 #import "AndyGCDSemaphore.h"
 #import "AndyGCDTimer.h"
+#import "AndySafeThread.h"
+#import "AndyLifeFreedomThread.h"
 
 #endif /* AndyGCD_h */
