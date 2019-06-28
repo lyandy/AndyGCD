@@ -186,3 +186,47 @@ for (int i = 0; i < 100; i++) {
 ```
 
 ---
+
+### AndyLifeFreedomThread
+
+```
+AndyLifeFreedomThread *lifeFreedomThread = [[AndyLifeFreedomThread alloc] init];
+    [lifeFreedomThread asyncExecuteBlock:^{
+        NSLog(@"-----%@", [NSThread currentThread]);
+    }];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [lifeFreedomThread syncExecuteBlock:^{
+            NSLog(@"block-----%@", [NSThread currentThread]);
+        }];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [lifeFreedomThread stop];
+        });
+    });
+
+```
+
+---
+
+### AndySafeThread
+
+```
+[[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+        NSLog(@"111-----%@", [NSThread currentThread]);
+        [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+            NSLog(@"222-----%@", [NSThread currentThread]);
+            [[AndySafeThread sharedSafeThread] asyncExecuteBlock:^{
+                NSLog(@"333-----%@", [NSThread currentThread]);
+
+            }];
+            [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+                NSLog(@"444-----%@", [NSThread currentThread]);
+
+            }];
+        }];
+    }];
+
+```
+
+---

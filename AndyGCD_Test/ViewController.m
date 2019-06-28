@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "AndyGCD.h"
+#import "AndySafeThread.h"
 
 @interface ViewController ()
 
@@ -21,28 +22,62 @@
 {
     [super viewDidLoad];
     
-    AndyGCDQueue *contextQueue = [[AndyGCDQueue alloc] initWithQOS:NSQualityOfServiceUtility queueCount:5];
-    for (int i = 0; i < 100; i++) {
-        [contextQueue execute:^{
-            
-            NSLog(@"=====> %@", [NSThread currentThread]);
-        }];
-        
-        [contextQueue execute:^{
-            
-            NSLog(@"=====> %@", [NSThread currentThread]);
-        }];
-        
-        [contextQueue execute:^{
-            
-            NSLog(@"=====> %@", [NSThread currentThread]);
-        }];
-    }
-    
-    AndyGCDQueue *queue = [[AndyGCDQueue alloc] initSerial];
-    [queue execute:^{
-       NSLog(@"=====> %@", [NSThread currentThread]);
+    AndyLifeFreedomThread *lifeFreedomThread = [[AndyLifeFreedomThread alloc] init];
+    [lifeFreedomThread asyncExecuteBlock:^{
+        NSLog(@"-----%@", [NSThread currentThread]);
     }];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [lifeFreedomThread syncExecuteBlock:^{
+            NSLog(@"block-----%@", [NSThread currentThread]);
+        }];
+
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [lifeFreedomThread stop];
+        });
+    });
+    
+    [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+        NSLog(@"111-----%@", [NSThread currentThread]);
+        [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+            NSLog(@"222-----%@", [NSThread currentThread]);
+            [[AndySafeThread sharedSafeThread] asyncExecuteBlock:^{
+                NSLog(@"333-----%@", [NSThread currentThread]);
+                
+            }];
+            [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+                NSLog(@"444-----%@", [NSThread currentThread]);
+                
+            }];
+        }];
+    }];
+    
+//    [AndyGCDQueue executeInGlobalQueue:^{
+//        NSLog(@"");
+//    }];
+    
+//    AndyGCDQueue *contextQueue = [[AndyGCDQueue alloc] initWithQOS:NSQualityOfServiceUtility queueCount:5];
+//    for (int i = 0; i < 100; i++) {
+//        [contextQueue execute:^{
+//
+//            NSLog(@"=====> %@", [NSThread currentThread]);
+//        }];
+//
+//        [contextQueue execute:^{
+//
+//            NSLog(@"=====> %@", [NSThread currentThread]);
+//        }];
+//
+//        [contextQueue execute:^{
+//
+//            NSLog(@"=====> %@", [NSThread currentThread]);
+//        }];
+//    }
+//
+//    AndyGCDQueue *queue = [[AndyGCDQueue alloc] initSerial];
+//    [queue execute:^{
+//       NSLog(@"=====> %@", [NSThread currentThread]);
+//    }];
     
 
     
