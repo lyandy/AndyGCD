@@ -132,7 +132,7 @@ NSArray *subpaths = [mgr subpathsAtPath:from];
 
 ### barrier
 
-_注意 ```dispatch_get_global_queue(<#long identifier#>, <#unsigned long flags#>)```是不行的。即在使用barrier的时候不可以使用```[AndyGCDQueue globalQueue]```全局队列_
+_注意使用全局并发队列 ```dispatch_get_global_queue(<#long identifier#>, <#unsigned long flags#>)```是不行的，即不可以使用```[AndyGCDQueue globalQueue]```全局队列, 效果等同于 dispatch_async. 只能使用自己创建的 ```dispatch_async_create``` 并队列，即 ```[[AndyGCDQueue alloc] initConcurrent]```_
 
 
 ```
