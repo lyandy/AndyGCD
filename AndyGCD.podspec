@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "AndyGCD"
-  s.version      = "1.0.5"
+  s.version      = "1.0.6"
   s.summary      = "AndyGCD aimed to make C GCD easier and simpler to use. "
 
   # This description is used to generate tags and improve search results.
