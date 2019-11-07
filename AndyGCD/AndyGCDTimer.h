@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AndyGCDConst.h"
 
 @class AndyGCDQueue;
 
@@ -23,7 +24,11 @@
 - (void)timerExecute:(dispatch_block_t __nonnull)block timeInterval:(uint64_t)interval delay:(uint64_t)delay;
 - (void)timerExecute:(dispatch_block_t __nonnull)block timeIntervalWithSecs:(float)secs;
 - (void)timerExecute:(dispatch_block_t __nonnull)block timeIntervalWithSecs:(float)secs delaySecs:(float)delaySecs;
-- (void)start;
+- (void)resume;
+- (void)suspend;
+
+/// 开始计时器，于 1.0.6 版本过期
+- (void)start AndyGCDDeprecated("use -[AndyGCDTimer resume] instead");
 - (void)destroy;
 
 @end

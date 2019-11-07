@@ -77,7 +77,7 @@ self.timer = [[AndyGCDTimer alloc] initInQueue:[AndyGCDQueue mainQueue]];
     NSLog(@"---%@", [NSThread currentThread]);
 } timeInterval:NSEC_PER_SEC * 3 delay:NSEC_PER_SEC * 3];
 
-[self.timer start];
+[self.timer resume];
 
 
 ```

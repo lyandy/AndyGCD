@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 #define ANDYGCD_EXTERN UIKIT_EXTERN
 
 #define AndyGCDAssert(condition, desc, ...)  NSAssert(condition, desc, ##__VA_ARGS__)
 
-#define AndyGCDDeprecated(instead) NS_DEPRECATED(2_0, 2_0, 2_0, 2_0, instead)
+#define AndyGCDDeprecated(instead) DEPRECATED_MSG_ATTRIBUTE(instead)
 

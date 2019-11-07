@@ -10,19 +10,17 @@
 #import "AndyGCDQueue.h"
 #import "AndyGCDConst.h"
 
+@interface AndyGCDTimer ()
+
+@property (nonatomic, assign, getter=isSuspend) BOOL suspend;
+
+@end
+
 @implementation AndyGCDTimer
 
 - (instancetype)init
 {
-    self = [super init];
-    
-    if (self)
-    {
-        self.dispatchSource = \
-        dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
-    }
-    
-    return self;
+    return [self initInQueue:nil];
 }
 
 - (instancetype)initInQueue:(AndyGCDQueue *)queue
@@ -31,8 +29,10 @@
     
     if (self)
     {
+        if (queue == nil) queue = [AndyGCDQueue globalQueue];
         self.dispatchSource = \
         dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue.dispatchQueue);
+        self.suspend = YES; // 默认创建的timer都是挂起的
     }
     
     return self;
@@ -70,14 +70,41 @@
     dispatch_source_set_event_handler(self.dispatchSource, block);
 }
 
+// resume 必须从 挂起中 恢复
+- (void)resume
+{
+    if (self.isSuspend == YES)
+    {
+        AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
+        dispatch_resume(self.dispatchSource);
+        self.suspend = NO;
+    }
+}
+
+// suspend 必须从 恢复中 挂起
+- (void)suspend
+{
+    if (self.isSuspend == NO)
+    {
+        AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
+        dispatch_suspend(self.dispatchSource);
+        self.suspend = YES;
+    }
+}
+
+// 多次无条件的resume会crash
 - (void)start
 {
     AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_resume(self.dispatchSource);
+    self.suspend = NO;
 }
 
+// cancel 必须从 resume 状态下取消
 - (void)destroy
 {
+    [self resume];
+    
     AndyGCDAssert(self.dispatchSource != nil, @"self.dispatchSource can not be nil");
     dispatch_source_cancel(self.dispatchSource);
 }

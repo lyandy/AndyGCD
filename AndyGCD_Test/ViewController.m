@@ -22,35 +22,35 @@
 {
     [super viewDidLoad];
     
-    AndyLifeFreedomThread *lifeFreedomThread = [[AndyLifeFreedomThread alloc] init];
-    [lifeFreedomThread asyncExecuteBlock:^{
-        NSLog(@"-----%@", [NSThread currentThread]);
-    }];
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [lifeFreedomThread syncExecuteBlock:^{
-            NSLog(@"block-----%@", [NSThread currentThread]);
-        }];
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [lifeFreedomThread stop];
-        });
-    });
-    
-    [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
-        NSLog(@"111-----%@", [NSThread currentThread]);
-        [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
-            NSLog(@"222-----%@", [NSThread currentThread]);
-            [[AndySafeThread sharedSafeThread] asyncExecuteBlock:^{
-                NSLog(@"333-----%@", [NSThread currentThread]);
-                
-            }];
-            [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
-                NSLog(@"444-----%@", [NSThread currentThread]);
-                
-            }];
-        }];
-    }];
+//    AndyLifeFreedomThread *lifeFreedomThread = [[AndyLifeFreedomThread alloc] init];
+//    [lifeFreedomThread asyncExecuteBlock:^{
+//        NSLog(@"-----%@", [NSThread currentThread]);
+//    }];
+//
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [lifeFreedomThread syncExecuteBlock:^{
+//            NSLog(@"block-----%@", [NSThread currentThread]);
+//        }];
+//
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            [lifeFreedomThread stop];
+//        });
+//    });
+//
+//    [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+//        NSLog(@"111-----%@", [NSThread currentThread]);
+//        [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+//            NSLog(@"222-----%@", [NSThread currentThread]);
+//            [[AndySafeThread sharedSafeThread] asyncExecuteBlock:^{
+//                NSLog(@"333-----%@", [NSThread currentThread]);
+//
+//            }];
+//            [[AndySafeThread sharedSafeThread] syncExecuteBlock:^{
+//                NSLog(@"444-----%@", [NSThread currentThread]);
+//
+//            }];
+//        }];
+//    }];
     
 //    [AndyGCDQueue executeInGlobalQueue:^{
 //        NSLog(@"");
@@ -150,15 +150,16 @@
 //    } inGroup:group];
 //    
 //    
-//    //timer
-//    self.timer = [[AndyGCDTimer alloc] initInQueue:[AndyGCDQueue mainQueue]];
-//    
-//    [self.timer timerExecute:^{
-//        
-//        NSLog(@"---%@", [NSThread currentThread]);
-//    } timeInterval:NSEC_PER_SEC * 3 delay:NSEC_PER_SEC * 3];
-//    
-//    [self.timer start];
+    //timer
+    self.timer = [[AndyGCDTimer alloc] initInQueue:[AndyGCDQueue mainQueue]];
+    
+    [self.timer timerExecute:^{
+        
+        NSLog(@"---%@", [NSThread currentThread]);
+    } timeInterval:NSEC_PER_SEC * 1];
+    
+    [self.timer start];
+//    [self.timer destroy];
 //    
 //    
 //    //semaphore
@@ -216,6 +217,14 @@
 //    [concurrentQueue execute:^{
 //        NSLog(@"----4-----%@", [NSThread currentThread]);
 //    }];
+}
+
+- (IBAction)suspend:(UIButton *)sender {
+    [self.timer suspend];
+}
+
+- (IBAction)resume:(UIButton *)sender {
+    [self.timer resume];
 }
 
 

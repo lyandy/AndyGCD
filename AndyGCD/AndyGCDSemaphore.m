@@ -13,14 +13,7 @@
 
 - (instancetype)init
 {
-    self = [super init];
-    
-    if (self)
-    {
-        self.dispatchSemaphore = dispatch_semaphore_create(0);
-    }
-    
-    return self;
+    return [self initWithValue:0];
 }
 
 - (instancetype)initWithValue:(long)value
