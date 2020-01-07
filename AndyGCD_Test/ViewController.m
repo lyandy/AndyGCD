@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "AndyGCD.h"
 #import "AndySafeThread.h"
+#import "AndyPeronalSafeThread.h"
 
 @interface ViewController ()
 
@@ -51,6 +52,16 @@
 //            }];
 //        }];
 //    }];
+    
+    for (int i = 0; i <= 10; i++) {
+        [[AndySafeThread sharedSafeThread] asyncExecuteBlock:^{
+            NSLog(@"1111====> %@", [NSThread currentThread]);
+        }];
+        
+        [[AndyPeronalSafeThread sharedSafeThread] asyncExecuteBlock:^{
+            NSLog(@"2222====> %@", [NSThread currentThread]);
+        }];
+    }
     
 //    [AndyGCDQueue executeInGlobalQueue:^{
 //        NSLog(@"");
@@ -151,14 +162,14 @@
 //    
 //    
     //timer
-    self.timer = [[AndyGCDTimer alloc] initInQueue:[AndyGCDQueue mainQueue]];
-    
-    [self.timer timerExecute:^{
-        
-        NSLog(@"---%@", [NSThread currentThread]);
-    } timeInterval:NSEC_PER_SEC * 1];
-    
-    [self.timer start];
+//    self.timer = [[AndyGCDTimer alloc] initInQueue:[AndyGCDQueue mainQueue]];
+//
+//    [self.timer timerExecute:^{
+//
+//        NSLog(@"---%@", [NSThread currentThread]);
+//    } timeInterval:NSEC_PER_SEC * 1];
+//
+//    [self.timer start];
 //    [self.timer destroy];
 //    
 //    

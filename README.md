@@ -229,4 +229,6 @@ AndyLifeFreedomThread *lifeFreedomThread = [[AndyLifeFreedomThread alloc] init];
 
 ```
 
+_如果想自定义 SafeThread 用于处理自己的任务，可以继承自 AndySafeThread ，并重写 +[AndySafeThread sharedSafeThread] 方法即可_
+
 ---
