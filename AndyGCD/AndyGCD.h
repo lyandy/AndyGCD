@@ -15,5 +15,7 @@
 #import "AndyGCDTimer.h"
 #import "AndySafeThread.h"
 #import "AndyLifeFreedomThread.h"
+#import "AndyTask.h"
+#import "AndyTaskQueue.h"
 
 #endif /* AndyGCD_h */

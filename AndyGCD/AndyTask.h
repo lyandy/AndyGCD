@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^toNextTaskBlock)(NSError * error, id result);
-typedef void (^taskBlock)(NSError * error, id obj, toNextTaskBlock tnt);
+typedef void (^callNextTaskBlock)(NSError * error, id result);
+typedef void (^taskBlock)(NSError * error, id obj, callNextTaskBlock cntb);
 
 typedef NS_ENUM(NSUInteger, TaskStatus) {
     TaskStatusInQueue,

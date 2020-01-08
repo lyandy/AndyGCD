@@ -13,7 +13,7 @@
 
 @property (nonatomic, strong) id obj;
 
-- (void)doTaskWithError:(NSError *)error params:(id)obj toNextTask:(toNextTaskBlock)tnt;
+- (void)doTaskWithError:(NSError *)error params:(id)obj callNextTask:(callNextTaskBlock)cntb;
 
 @end
 
@@ -43,7 +43,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
     self = [super init];
     if (self)
     {
-        _queue = dispatch_queue_create([[NSString stringWithFormat:@"MMQueue.%@", name] UTF8String], NULL);
+        _queue = dispatch_queue_create([[NSString stringWithFormat:@"AndyTaskQueue.%@", name] UTF8String], NULL);
         dispatch_queue_set_specific(_queue, kDispatchQueueSpecificKey, (__bridge void *)(self), NULL);
         _tasksArrM = [NSMutableArray array];
     }
@@ -80,7 +80,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
         _executing = task != nil;
         if (task == nil) {
             NSLog(@"完成");
-            self.finishedBlock == nil ?: self.finishedBlock();
+            if (self.finishedBlock) self.finishedBlock();
         }
     }
     
@@ -91,7 +91,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
     
     if (currentQueue == self)
     {
-        [task doTaskWithError:error params:task.obj?:obj toNextTask:^(NSError *err, id result) {
+        [task doTaskWithError:error params:task.obj?:obj callNextTask:^(NSError *err, id result) {
             
             __strong typeof(weakSelf) strongSelf = weakSelf;
             
@@ -111,7 +111,7 @@ static const void * const kDispatchQueueSpecificKey = &kDispatchQueueSpecificKey
     else
     {
         dispatch_async(_queue, ^{
-            [task doTaskWithError:error params:task.obj?:obj toNextTask:^(NSError *err, id result) {
+            [task doTaskWithError:error params:task.obj?:obj callNextTask:^(NSError *err, id result) {
                 __strong typeof(weakSelf) strongSelf = weakSelf;
                 
                 @synchronized (strongSelf) {

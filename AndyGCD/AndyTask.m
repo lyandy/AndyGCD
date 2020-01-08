@@ -43,11 +43,11 @@
     return self;
 }
 
-- (void)doTaskWithError:(NSError *)error params:(id)obj toNextTask:(toNextTaskBlock)tnt
+- (void)doTaskWithError:(NSError *)error params:(id)obj callNextTask:(callNextTaskBlock)cntb
 {
     if (self.block)
     {
-        self.block(error, obj, tnt);
+        self.block(error, obj, cntb);
     }
 }
 
