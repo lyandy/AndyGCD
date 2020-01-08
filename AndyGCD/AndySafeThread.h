@@ -16,7 +16,7 @@ API_AVAILABLE(ios(10.0))
 
 + (AndySafeThread *)sharedSafeThread;
 
-- (void)stop __attribute__((unavailable(" -[AndyLifeFreedomThread stop] method can`t be called by AndySafeThread singleton")));
+- (void)stop __attribute__((unavailable(" -[AndyLifeFreedomThread stop] method can`t be called by AndySafeThread or AndySafeThread subclass")));
 
 @end
 

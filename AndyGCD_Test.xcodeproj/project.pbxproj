@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B6704A4423C4A95D00E81AB3 /* AndyPeronalSafeThread.m in Sources */ = {isa = PBXBuildFile; fileRef = B6704A4323C4A95D00E81AB3 /* AndyPeronalSafeThread.m */; };
+		B6704A4923C4B74800E81AB3 /* AndyTask.m in Sources */ = {isa = PBXBuildFile; fileRef = B6704A4623C4B74800E81AB3 /* AndyTask.m */; };
+		B6704A4A23C4B74800E81AB3 /* AndyTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = B6704A4823C4B74800E81AB3 /* AndyTaskQueue.m */; };
 		B6B707A61E1BAF9900347B96 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B707A51E1BAF9900347B96 /* main.m */; };
 		B6B707A91E1BAF9900347B96 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B707A81E1BAF9900347B96 /* AppDelegate.m */; };
 		B6B707AC1E1BAF9900347B96 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6B707AB1E1BAF9900347B96 /* ViewController.m */; };
@@ -45,6 +47,10 @@
 /* Begin PBXFileReference section */
 		B6704A4223C4A95D00E81AB3 /* AndyPeronalSafeThread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AndyPeronalSafeThread.h; sourceTree = "<group>"; };
 		B6704A4323C4A95D00E81AB3 /* AndyPeronalSafeThread.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AndyPeronalSafeThread.m; sourceTree = "<group>"; };
+		B6704A4523C4B74800E81AB3 /* AndyTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndyTask.h; sourceTree = "<group>"; };
+		B6704A4623C4B74800E81AB3 /* AndyTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndyTask.m; sourceTree = "<group>"; };
+		B6704A4723C4B74800E81AB3 /* AndyTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AndyTaskQueue.h; sourceTree = "<group>"; };
+		B6704A4823C4B74800E81AB3 /* AndyTaskQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AndyTaskQueue.m; sourceTree = "<group>"; };
 		B6B707A11E1BAF9900347B96 /* AndyGCD_Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AndyGCD_Test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6B707A51E1BAF9900347B96 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6B707A71E1BAF9900347B96 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -103,41 +109,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B6704A3F23C49AA300E81AB3 /* Thread */ = {
-			isa = PBXGroup;
-			children = (
-				B6D9610B22C5F75D00A8F8D9 /* AndyLifeFreedomThread.h */,
-				B6D9610C22C5F75D00A8F8D9 /* AndyLifeFreedomThread.m */,
-				B6D9610E22C5F83800A8F8D9 /* AndySafeThread.h */,
-				B6D9610F22C5F83800A8F8D9 /* AndySafeThread.m */,
-			);
-			path = Thread;
-			sourceTree = "<group>";
-		};
-		B6704A4023C49AA300E81AB3 /* Task */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Task;
-			sourceTree = "<group>";
-		};
-		B6704A4123C49AA300E81AB3 /* GCD */ = {
-			isa = PBXGroup;
-			children = (
-				B6B707D91E1BB0F300347B96 /* AndyGCDQueue.h */,
-				B6B707DA1E1BB0F300347B96 /* AndyGCDQueue.m */,
-				B6B707DC1E1BB1AF00347B96 /* AndyGCDGroup.h */,
-				B6B707DD1E1BB1AF00347B96 /* AndyGCDGroup.m */,
-				B6B707DF1E1BB77100347B96 /* AndyGCDSemaphore.h */,
-				B6B707E01E1BB77100347B96 /* AndyGCDSemaphore.m */,
-				B6B707E21E1BB78100347B96 /* AndyGCDTimer.h */,
-				B6B707E31E1BB78100347B96 /* AndyGCDTimer.m */,
-				B6BA3A7B1E5EEE65006E7983 /* AndyGCDConst.h */,
-				B6BA3A7C1E5EEE65006E7983 /* AndyGCDConst.m */,
-			);
-			path = GCD;
-			sourceTree = "<group>";
-		};
 		B6B707981E1BAF9900347B96 = {
 			isa = PBXGroup;
 			children = (
@@ -207,9 +178,24 @@
 			isa = PBXGroup;
 			children = (
 				B6B707D81E1BB0A900347B96 /* AndyGCD.h */,
-				B6704A4123C49AA300E81AB3 /* GCD */,
-				B6704A4023C49AA300E81AB3 /* Task */,
-				B6704A3F23C49AA300E81AB3 /* Thread */,
+				B6B707D91E1BB0F300347B96 /* AndyGCDQueue.h */,
+				B6B707DA1E1BB0F300347B96 /* AndyGCDQueue.m */,
+				B6B707DC1E1BB1AF00347B96 /* AndyGCDGroup.h */,
+				B6B707DD1E1BB1AF00347B96 /* AndyGCDGroup.m */,
+				B6B707DF1E1BB77100347B96 /* AndyGCDSemaphore.h */,
+				B6B707E01E1BB77100347B96 /* AndyGCDSemaphore.m */,
+				B6B707E21E1BB78100347B96 /* AndyGCDTimer.h */,
+				B6B707E31E1BB78100347B96 /* AndyGCDTimer.m */,
+				B6BA3A7B1E5EEE65006E7983 /* AndyGCDConst.h */,
+				B6BA3A7C1E5EEE65006E7983 /* AndyGCDConst.m */,
+				B6D9610B22C5F75D00A8F8D9 /* AndyLifeFreedomThread.h */,
+				B6D9610C22C5F75D00A8F8D9 /* AndyLifeFreedomThread.m */,
+				B6D9610E22C5F83800A8F8D9 /* AndySafeThread.h */,
+				B6D9610F22C5F83800A8F8D9 /* AndySafeThread.m */,
+				B6704A4523C4B74800E81AB3 /* AndyTask.h */,
+				B6704A4623C4B74800E81AB3 /* AndyTask.m */,
+				B6704A4723C4B74800E81AB3 /* AndyTaskQueue.h */,
+				B6704A4823C4B74800E81AB3 /* AndyTaskQueue.m */,
 			);
 			path = AndyGCD;
 			sourceTree = "<group>";
@@ -353,7 +339,9 @@
 				B6B707E11E1BB77100347B96 /* AndyGCDSemaphore.m in Sources */,
 				B6BA3A7D1E5EEE65006E7983 /* AndyGCDConst.m in Sources */,
 				B6B707AC1E1BAF9900347B96 /* ViewController.m in Sources */,
+				B6704A4923C4B74800E81AB3 /* AndyTask.m in Sources */,
 				B6D9611022C5F83800A8F8D9 /* AndySafeThread.m in Sources */,
+				B6704A4A23C4B74800E81AB3 /* AndyTaskQueue.m in Sources */,
 				B6B707DE1E1BB1AF00347B96 /* AndyGCDGroup.m in Sources */,
 				B6B707A91E1BAF9900347B96 /* AppDelegate.m in Sources */,
 				B6B707A61E1BAF9900347B96 /* main.m in Sources */,
